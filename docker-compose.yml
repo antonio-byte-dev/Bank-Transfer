@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  # --- Postgres: your own domain data (accounts, transfers, audit trail) ---
+  postgres:
+    image: postgres:16-alpine
+    container_name: transfer-postgres
+    environment:
+      POSTGRES_DB: transferdb
+      POSTGRES_USER: transfer_user
+      POSTGRES_PASSWORD: transfer_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - transfer-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U transfer_user -d transferdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # --- Your Spring Boot backend ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: transfer-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Camunda client (camunda-spring-boot-starter) - self-managed, both transports needed
+      CAMUNDA_CLIENT_ZEEBE_GRPCADDRESS: http://host.docker.internal:26500
+      CAMUNDA_CLIENT_RESTADDRESS: http://host.docker.internal:8080
+
+      # Spring datasource
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/transferdb
+      SPRING_DATASOURCE_USERNAME: transfer_user
+      SPRING_DATASOURCE_PASSWORD: transfer_pass
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+    ports:
+      - "8081:8081"
+    networks:
+      - transfer-net
+
+networks:
+  transfer-net:
+    driver: bridge
+
+volumes:
+  zeebe-data:
+  postgres-data:
