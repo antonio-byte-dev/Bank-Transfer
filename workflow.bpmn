@@ -6,12 +6,12 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0tf2cjm" sourceRef="StartEvent_1" targetRef="Activity_0kiyozv" />
     <bpmn:sequenceFlow id="Flow_0x03sj7" sourceRef="Activity_1cjlevf" targetRef="Gateway_0iiua7u" />
-    <bpmn:endEvent id="Event_0d4mf4x">
+    <bpmn:endEvent id="Event_0d4mf4x" name="Transaction Declined">
       <bpmn:incoming>Flow_0pbgm7h</bpmn:incoming>
       <bpmn:incoming>Flow_06w75hs</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_16g2cnn" sourceRef="Activity_1ehl0hx" targetRef="Event_0i7i1dl" />
-    <bpmn:endEvent id="Event_0i7i1dl">
+    <bpmn:endEvent id="Event_0i7i1dl" name="Transaction Finished Successfully">
       <bpmn:incoming>Flow_16g2cnn</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0iiua7u" default="Flow_0dmn78n">
@@ -19,7 +19,7 @@
       <bpmn:outgoing>Flow_06rehef</bpmn:outgoing>
       <bpmn:outgoing>Flow_0dmn78n</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_06rehef" sourceRef="Gateway_0iiua7u" targetRef="Activity_1bidt0r">
+    <bpmn:sequenceFlow id="Flow_06rehef" name="Suspicious Activity" sourceRef="Gateway_0iiua7u" targetRef="Activity_1bidt0r">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=flagged = true
 </bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -45,7 +45,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0u0l6ko" sourceRef="Activity_0kiyozv" targetRef="Gateway_1xob3qc" />
     <bpmn:sequenceFlow id="Flow_0t7ebc6" sourceRef="Gateway_1xob3qc" targetRef="Activity_1cjlevf" />
-    <bpmn:sequenceFlow id="Flow_0pbgm7h" sourceRef="Gateway_1xob3qc" targetRef="Event_0d4mf4x">
+    <bpmn:sequenceFlow id="Flow_0pbgm7h" name="Not enough funds" sourceRef="Gateway_1xob3qc" targetRef="Event_0d4mf4x">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(sufficientBalance)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Activity_1bidt0r" name="Compliance Review">
@@ -61,8 +61,8 @@
       <bpmn:outgoing>Flow_17jxusd</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_1qw2c6o" sourceRef="Activity_1bidt0r" targetRef="Gateway_0qmhn0i" />
-    <bpmn:sequenceFlow id="Flow_06w75hs" sourceRef="Gateway_0qmhn0i" targetRef="Event_0d4mf4x" />
-    <bpmn:sequenceFlow id="Flow_17jxusd" sourceRef="Gateway_0qmhn0i" targetRef="Activity_1ehl0hx">
+    <bpmn:sequenceFlow id="Flow_06w75hs" name="Declined" sourceRef="Gateway_0qmhn0i" targetRef="Event_0d4mf4x" />
+    <bpmn:sequenceFlow id="Flow_17jxusd" name="Approved" sourceRef="Gateway_0qmhn0i" targetRef="Activity_1ehl0hx">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=complianceApproved</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Activity_1ehl0hx" name="Execute">
@@ -93,6 +93,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0i7i1dl_di" bpmnElement="Event_0i7i1dl">
         <dc:Bounds x="1272" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1260" y="145" width="62" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_01wba7s_di" bpmnElement="Activity_1cjlevf">
         <dc:Bounds x="590" y="80" width="100" height="80" />
@@ -105,6 +108,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0d4mf4x_di" bpmnElement="Event_0d4mf4x">
         <dc:Bounds x="952" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="941" y="375" width="58" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qu0vr3_di" bpmnElement="Activity_1ehl0hx">
         <dc:Bounds x="1070" y="80" width="100" height="80" />
@@ -120,6 +126,9 @@
       <bpmndi:BPMNEdge id="Flow_06rehef_di" bpmnElement="Flow_06rehef">
         <di:waypoint x="820" y="145" />
         <di:waypoint x="820" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="833" y="151.5" width="54" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16g2cnn_di" bpmnElement="Flow_16g2cnn">
         <di:waypoint x="1170" y="120" />
@@ -141,6 +150,9 @@
         <di:waypoint x="460" y="145" />
         <di:waypoint x="460" y="350" />
         <di:waypoint x="952" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="476" y="263.5" width="87" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1qw2c6o_di" bpmnElement="Flow_1qw2c6o">
         <di:waypoint x="900" y="240" />
@@ -149,11 +161,17 @@
       <bpmndi:BPMNEdge id="Flow_06w75hs_di" bpmnElement="Flow_06w75hs">
         <di:waypoint x="970" y="265" />
         <di:waypoint x="970" y="332" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="988" y="295.5" width="43" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17jxusd_di" bpmnElement="Flow_17jxusd">
         <di:waypoint x="995" y="240" />
         <di:waypoint x="1120" y="240" />
         <di:waypoint x="1120" y="160" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1034" y="222" width="48" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
