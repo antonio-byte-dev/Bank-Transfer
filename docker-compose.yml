@@ -26,6 +26,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: backend
     container_name: transfer-backend
     depends_on:
       postgres:
@@ -40,8 +41,31 @@ services:
       SPRING_DATASOURCE_USERNAME: transfer_user
       SPRING_DATASOURCE_PASSWORD: transfer_pass
       SPRING_JPA_HIBERNATE_DDL-AUTO: update
+
+      # Activates DemoDataSeeder — resets accounts and clears transfer_history
+      # on every startup. Remove this (or set to a non-demo profile) for
+      # anything other than local demo use.
+      SPRING_PROFILES_ACTIVE: demo
     ports:
       - "8081:8081"
+    networks:
+      - transfer-net
+
+  # --- Vue frontend, built and served via Nginx ---
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+      args:
+        # Must be reachable from the browser, not a Docker-internal hostname —
+        # matches the backend's published port below.
+        VITE_API_BASE_URL: http://localhost:8081
+    container_name: transfer-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
     networks:
       - transfer-net
 
