@@ -76,21 +76,21 @@
         </div>
 
         <div class="field">
-          <label class="field__label" for="amount">Amount</label>
-          <div class="amount-control">
-            <span class="amount-control__prefix">$</span>
-            <input
-              id="amount"
-              v-model.number="form.amount"
-              class="field__control field__control--mono field__control--amount"
-              type="number"
-              min="0.01"
-              step="0.01"
-              placeholder="0.00"
-              required
-            />
-          </div>
-        </div>
+  <label class="field__label" for="amount">Amount</label>
+  <div class="amount-control">
+    <span class="amount-control__prefix">$</span>
+    <input
+      id="amount"
+      v-model.number="form.amount"
+      class="field__control field__control--mono field__control--amount"
+      type="number"
+      min="0.01"
+      step="0.01"
+      placeholder="0.00"
+      required
+    />
+  </div>
+</div>
 
         <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
         <p v-if="successMessage" class="form-success" role="status">{{ successMessage }}</p>
@@ -582,6 +582,12 @@ watch(role, (newRole) => {
   border: none;
   background: transparent;
   box-shadow: none !important;
+}
+
+.field__control--amount::-webkit-inner-spin-button,
+.field__control--amount::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
 }
 
 .admin-field .field__label {
