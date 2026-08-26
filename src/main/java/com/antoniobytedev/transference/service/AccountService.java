@@ -20,7 +20,7 @@ public class AccountService {
     }
 
     public double getBalance(String accountNumber) {
-        return getAccountOrThrow(accountNumber).getBalance();
+        return findAccountOrThrow(accountNumber).getBalance();
     }
 
     public boolean hasSufficientBalance(String accountNumber, double amount) {
@@ -32,16 +32,6 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    private Account getAccountOrThrow(String accountNumber) {
-        try{
-            return accountRepository.findById(accountNumber)
-                .orElseThrow(() -> new FileNotFoundException());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-        
-    }
 
     @Transactional
     public void executeTransfer(String fromAccount, String toAccount, double amount) {

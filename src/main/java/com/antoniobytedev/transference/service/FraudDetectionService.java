@@ -59,7 +59,7 @@ public class FraudDetectionService {
             reasons.append("First transfer to this payee combined with high amount; ");
         }
 
-        boolean flagged = riskScore >= 50;
+        boolean flagged = riskScore >= 40;
 
         // persist this transfer as part of history regardless of outcome
         transferHistoryRepository.save(new TransferHistory(fromAccount, toAccount, amount, Instant.now(), flagged));
