@@ -48,21 +48,31 @@ The Spring Boot app is both a **REST API** (serving the frontend) and a set of
   which bundles Zeebe, Elasticsearch, and Operate as local processes.
 
 ## Running the project
-
+ 
 1. Start Camunda locally via `c8run` (outside Docker — see its own docs for setup).
-2. From the project root, bring up the rest of the stack:
-
-   ```bash
+2. **Deploy `workflow.bpmn` to Camunda.** The backend's job workers
+   (`balance-check`, `fraud-check`, `compliance-review`, `execute-transfer`)
+   only receive work once a process definition referencing those job types
+   has actually been deployed — without this step, submitted transfers will
+   silently hang with no error, since there's no deployed process for them
+   to run against. Open `workflow.bpmn` in **Camunda Modeler** and use its
+   **Deploy** button (top-right), pointing it at your running `c8run`
+   instance (default `http://localhost:8080`).
+   Re-deploy any time `workflow.bpmn` changes — Zeebe process definitions
+   are versioned and immutable, so editing the file has no effect on
+   already-running or future instances until it's redeployed. See
+   [`docs/WORKFLOW.md`](docs/WORKFLOW.md) for the process itself.
+3. From the project root, bring up the rest of the stack:
+```bash
    docker compose up --build
-   ```
-
+```
+ 
    This starts:
    - `postgres` — the application database
    - `backend` — the Spring Boot app (REST API + Camunda job workers), on
      `http://localhost:8081`
    - `frontend` — the Vue app, served via Nginx, on `http://localhost:5173`
-
-3. Open `http://localhost:5173` in a browser. Demo accounts and transfer
+4. Open `http://localhost:5173` in a browser. Demo accounts and transfer
    history are reset automatically on every backend startup (see
    [Demo data](#demo-data) below).
 
