@@ -11,7 +11,7 @@ data, automated tests) around a realistic financial use case.
 ## Architecture
 
 ```
-┌─────────────┐      REST       ┌──────────────────┐      gRPC/REST      ┌───────────────┐
+┌─────────────┐      REST         ┌──────────────────┐      gRPC/REST         ┌───────────────┐
 │  Vue         │ ───────────────▶│  Spring Boot      │◀────────────────────▶│  Camunda 8     │
 │  frontend    │◀─────────────── │  transfer-backend │                      │  (c8run)       │
 └─────────────┘                  └──────────┬────────┘                      └───────────────┘
